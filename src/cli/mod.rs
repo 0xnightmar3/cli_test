@@ -16,7 +16,7 @@ pub struct Config {
     pub first_name: Option<String>,
 }
 
-fn to_config(m: &ArgMatches) -> Result<Config, Error> {
+fn to_config(m: ArgMatches) -> Result<Config, Error> {
     let cmd = match m.subcommand() {
         Some(("person", _m)) => Some(Cmd::Person),
         Some(("pet", _m)) => Some(Cmd::Pet),
@@ -24,7 +24,7 @@ fn to_config(m: &ArgMatches) -> Result<Config, Error> {
     };
     let is_fluffy = m.get_one::<bool>("fluffy").copied();
     let pet_name = match m.subcommand() {
-        Some(("pet", m)) => m.get_one::<String>("pet-name").cloned(),
+        Some(("pet", m)) => m.get_one::<String>("petname").cloned(),
         _ => None,
     };
     let first_name = match m.subcommand() {
@@ -79,7 +79,7 @@ fn build_cli() -> Command {
 }
 
 pub fn parse_cli_args() -> Result<Config, Error> {
-    to_config(&build_cli().get_matches())
+    to_config(build_cli().get_matches())
 }
 
 #[cfg(test)]
